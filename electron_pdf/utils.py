@@ -43,7 +43,7 @@ def electron_pdf(input, output_file=None, **kwargs):
 
     subprocess.call('electron-pdf {} {}'.format(input.filename, output_file), shell=True)
 
-    with open(output_file, 'r') as f:
+    with open(output_file, 'rb') as f:
         return File(f).read()
 
 
