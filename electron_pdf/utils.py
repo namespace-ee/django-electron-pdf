@@ -42,7 +42,13 @@ def electron_pdf(input, output_file=None, **kwargs):
         output_file = '/tmp/{}.pdf'.format(uuid.uuid4())
 
     if settings.ELECTRON_WITHOUT_GRAPHICAL_ENV:
-        subprocess.call('xvfb-run --server-args "-screen 0 1024x768x24" electron-pdf {} {}'.format(input.filename, output_file), shell=True)
+        if settings.XFVB_RUN_LOCATION:
+            subprocess.call(
+                '{} --server-args "-screen 0 1024x768x24" electron-pdf {} {}'.format(
+                    settings.XFVB_RUN_LOCATION, input.filename, output_file),
+                shell=True)
+        else:
+            subprocess.call('xvfb-run --server-args "-screen 0 1024x768x24" electron-pdf {} {}'.format(input.filename, output_file), shell=True)
     else:
         subprocess.call('electron-pdf {} {}'.format(input.filename, output_file), shell=True)
 
