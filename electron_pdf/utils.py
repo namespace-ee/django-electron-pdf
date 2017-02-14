@@ -43,10 +43,11 @@ def electron_pdf(input, output_file=None, **kwargs):
 
     if settings.ELECTRON_WITHOUT_GRAPHICAL_ENV:
         if getattr(settings, 'XVFB_RUN_LOCATION', None):
-            subprocess.call(
+            res = subprocess.call(
                 '{} --server-args "-screen 0 1024x768x24" electron-pdf {} {}'.format(
                     settings.XVFB_RUN_LOCATION, input.filename, output_file),
                 shell=True)
+            print res
         else:
             subprocess.call('xvfb-run --server-args "-screen 0 1024x768x24" electron-pdf {} {}'.format(input.filename, output_file), shell=True)
     else:
