@@ -5,12 +5,12 @@ from distutils.core import setup
 setup(
     name='django-electron-pdf',
     packages=['electron_pdf'],
-    version='0.4.2',
+    version='0.5',
     description='A Django wrapper to generate PDF from URL, HTML or Markdown files.',
     author='Madis Väin',
     author_email='madisvain@gmail.com',
     url='https://github.com/namespace-ee/django-electron-pdf',
-    download_url='https://github.com/namespace-ee/django-electron-pdf/tarball/0.1',
+    download_url='https://github.com/namespace-ee/django-electron-pdf/tarball/0.5',
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
