@@ -3,6 +3,7 @@
 import re
 import subprocess
 import uuid
+import six
 from tempfile import NamedTemporaryFile
 
 try:
@@ -37,20 +38,29 @@ def electron_pdf(input, output_file=None, **kwargs):
     """
     # Default options:
     options = getattr(settings, 'ELECTRON_PDF_OPTIONS', {})
+    timeout = getattr(settings, 'ELECTRON_PDF_TIMEOUT', 10)
 
     if not output_file:
         output_file = '/tmp/{}.pdf'.format(uuid.uuid4())
+
+    subprocess_kwargs = {
+        'shell': True,
+        'timeout': timeout,
+    }
+
+    if six.PY2:
+        del subprocess_kwargs['timeout']
 
     if settings.ELECTRON_WITHOUT_GRAPHICAL_ENV:
         if getattr(settings, 'XVFB_RUN_LOCATION', None):
             subprocess.call(
                 '{} --server-args "-screen 0 1024x768x24" electron-pdf {} {}'.format(
                     settings.XVFB_RUN_LOCATION, input.filename, output_file),
-                shell=True)
+                **subprocess_kwargs)
         else:
-            subprocess.call('xvfb-run --server-args "-screen 0 1024x768x24" electron-pdf {} {}'.format(input.filename, output_file), shell=True)
+            subprocess.call('xvfb-run --server-args "-screen 0 1024x768x24" electron-pdf {} {}'.format(input.filename, output_file), **subprocess_kwargs)
     else:
-        subprocess.call('electron-pdf {} {}'.format(input.filename, output_file), shell=True)
+        subprocess.call('electron-pdf {} {}'.format(input.filename, output_file), **subprocess_kwargs)
 
     with open(output_file, 'rb') as f:
         return File(f).read()
