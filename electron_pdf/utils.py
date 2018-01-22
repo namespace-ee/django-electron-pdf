@@ -4,6 +4,7 @@ import re
 import subprocess
 import uuid
 import six
+from builtins import str
 from tempfile import NamedTemporaryFile
 
 try:
@@ -133,7 +134,7 @@ def http_quote(string):
 
 def pathname2fileurl(pathname):
     """Returns a file:// URL for pathname. Handles OS-specific conversions."""
-    return urljoin('file:', pathname2url(pathname))
+    return urljoin('file:', str(pathname2url(pathname)))
 
 
 def make_absolute_paths(content):
